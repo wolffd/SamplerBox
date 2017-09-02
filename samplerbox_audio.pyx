@@ -16,7 +16,7 @@ cimport numpy
 
 def mixaudiobuffers(list playingsounds, list rmlist, int frame_count, numpy.ndarray FADEOUT, int FADEOUTLENGTH, numpy.ndarray SPEED, numpy.ndarray VELOCITY):
     cdef int i, ii, k, l, N, length, looppos, fadeoutpos
-    cdef float speed, newsz, pos, j
+    cdef float velofactor, speed, newsz, pos, j
     cdef numpy.ndarray b = numpy.zeros(2 * frame_count, numpy.float32)      # output buffer
     cdef float* bb = <float *> (b.data)                                     # and its pointer
     cdef numpy.ndarray z
@@ -54,8 +54,8 @@ def mixaudiobuffers(list playingsounds, list rmlist, int frame_count, numpy.ndar
                     ii = 0
                     j = pos + ii * speed   
                     k = <int> j       
-                bb[2 * i] += (zz[2 * k] + (j - k) * (zz[2 * k + 2] - zz[2 * k])) * fadeout[fadeoutpos + i]                   # linear interpolation
-                bb[2 * i + 1] += (zz[2 * k + 1] + (j - k) * (zz[2 * k + 3] - zz[2 * k + 1])) * fadeout[fadeoutpos + i]       
+                bb[2 * i] += (zz[2 * k] + (j - k) * (zz[2 * k + 2] - zz[2 * k])) * fadeout[fadeoutpos + i] * velofactor                      # linear interpolation
+                bb[2 * i + 1] += (zz[2 * k + 1] + (j - k) * (zz[2 * k + 3] - zz[2 * k + 1])) * fadeout[fadeoutpos + i] * velofactor     
             snd.fadeoutpos += i
 
         else:
