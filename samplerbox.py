@@ -160,7 +160,7 @@ FADEOUT = numpy.linspace(1., 0., FADEOUTLENGTH)            # by default, float64
 FADEOUT = numpy.power(FADEOUT, 6)
 FADEOUT = numpy.append(FADEOUT, numpy.zeros(FADEOUTLENGTH, numpy.float32)).astype(numpy.float32)
 SPEED = numpy.power(2, numpy.arange(0.0, 84.0)/12).astype(numpy.float32)
-VELOCITY = (numpy.logspace(-1.0, 1.0, 2*128-1)/10).astype(numpy.float32)
+VELOCITY = (numpy.logspace(-1.0, 1.0, 2*128-1)).astype(numpy.float32)
 
 samples = {}
 playingnotes = {}
