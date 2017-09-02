@@ -204,7 +204,7 @@ def MidiCallback(message, time_stamp):
     if messagetype == 9:    # Note on
         midinote += globaltranspose
         try:
-            playingnotes.setdefault(midinote, []).append(samples[midinote, velocity].play(midinote))
+            playingnotes.setdefault(midinote, []).append(samples[midinote, velocity].play(midinote, velocity))
         except:
             pass
 

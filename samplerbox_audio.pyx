@@ -54,8 +54,8 @@ def mixaudiobuffers(list playingsounds, list rmlist, int frame_count, numpy.ndar
                     ii = 0
                     j = pos + ii * speed   
                     k = <int> j       
-                bb[2 * i] += (zz[2 * k] + (j - k) * (zz[2 * k + 2] - zz[2 * k])) * fadeout[fadeoutpos + i] * velofactor                  # linear interpolation
-                bb[2 * i + 1] += (zz[2 * k + 1] + (j - k) * (zz[2 * k + 3] - zz[2 * k + 1])) * fadeout[fadeoutpos + i] * velofactor       
+                bb[2 * i] += (zz[2 * k] + (j - k) * (zz[2 * k + 2] - zz[2 * k])) * fadeout[fadeoutpos + i]                   # linear interpolation
+                bb[2 * i + 1] += (zz[2 * k + 1] + (j - k) * (zz[2 * k + 3] - zz[2 * k + 1])) * fadeout[fadeoutpos + i]       
             snd.fadeoutpos += i
 
         else:
@@ -70,8 +70,8 @@ def mixaudiobuffers(list playingsounds, list rmlist, int frame_count, numpy.ndar
                     ii = 0
                     j = pos + ii * speed   
                     k = <int> j  
-                bb[2 * i] += zz[2 * k] + (j - k) * (zz[2 * k + 2] - zz[2 * k])                                               # linear interpolation
-                bb[2 * i + 1] += zz[2 * k + 1] + (j - k) * (zz[2 * k + 3] - zz[2 * k + 1])
+                bb[2 * i] += (zz[2 * k] + (j - k) * (zz[2 * k + 2] - zz[2 * k])) * velofactor                                            # linear interpolation
+                bb[2 * i + 1] += (zz[2 * k + 1] + (j - k) * (zz[2 * k + 3] - zz[2 * k + 1]) ) * velofactor
 
         snd.pos += ii * speed
 
