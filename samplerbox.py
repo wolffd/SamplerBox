@@ -105,12 +105,13 @@ class waveread(wave.Wave_read):
 
 class PlayingSound:
 
-    def __init__(self, sound, note):
+    def __init__(self, sound, note, velocity):
         self.sound = sound
         self.pos = 0
         self.fadeoutpos = 0
         self.isfadeout = False
         self.note = note
+        self.velocity = velocity
 
     def fadeout(self, i):
         self.isfadeout = True
@@ -140,8 +141,8 @@ class Sound:
 
         wf.close()
 
-    def play(self, note):
-        snd = PlayingSound(self, note)
+    def play(self, note, velocity = 127):
+        snd = PlayingSound(self, note, velocity)
         playingsounds.append(snd)
         return snd
 
@@ -159,6 +160,7 @@ FADEOUT = numpy.linspace(1., 0., FADEOUTLENGTH)            # by default, float64
 FADEOUT = numpy.power(FADEOUT, 6)
 FADEOUT = numpy.append(FADEOUT, numpy.zeros(FADEOUTLENGTH, numpy.float32)).astype(numpy.float32)
 SPEED = numpy.power(2, numpy.arange(0.0, 84.0)/12).astype(numpy.float32)
+VELOCITY = (numpy.logspace(-1.0, 1.0, 2*128-1)/10).astype(numpy.float32)
 
 samples = {}
 playingnotes = {}
@@ -178,7 +180,7 @@ def AudioCallback(outdata, frame_count, time_info, status):
     global playingsounds
     rmlist = []
     playingsounds = playingsounds[-MAX_POLYPHONY:]
-    b = samplerbox_audio.mixaudiobuffers(playingsounds, rmlist, frame_count, FADEOUT, FADEOUTLENGTH, SPEED)
+    b = samplerbox_audio.mixaudiobuffers(playingsounds, rmlist, frame_count, FADEOUT, FADEOUTLENGTH, SPEED, VELOCITY)
     for e in rmlist:
         try:
             playingsounds.remove(e)
@@ -195,7 +197,7 @@ def MidiCallback(message, time_stamp):
     note = message[1] if len(message) > 1 else None
     midinote = note
     velocity = message[2] if len(message) > 2 else None
-
+    # print(str(message))
     if messagetype == 9 and velocity == 0:
         messagetype = 8
 
@@ -350,13 +352,13 @@ def ActuallyLoad():
 #
 #########################################
 
-try:
-    sd = sounddevice.OutputStream(device=AUDIO_DEVICE_ID, blocksize=512, samplerate=44100, channels=2, dtype='int16', callback=AudioCallback)
-    sd.start()
-    print 'Opened audio device #%i' % AUDIO_DEVICE_ID
-except:
-    print 'Invalid audio device #%i' % AUDIO_DEVICE_ID
-    exit(1)
+#try:
+sd = sounddevice.OutputStream(device=AUDIO_DEVICE_ID, blocksize=64, channels=2, samplerate=48000 ,dtype='int16', callback=AudioCallback)
+sd.start()
+print 'Opened audio device #%i' % AUDIO_DEVICE_ID
+#except:
+#    print 'Invalid audio device #%i' % AUDIO_DEVICE_ID
+#    exit(1)
 
 
 #########################################
