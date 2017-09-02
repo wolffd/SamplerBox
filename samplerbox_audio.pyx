@@ -29,7 +29,7 @@ def mixaudiobuffers(list playingsounds, list rmlist, int frame_count, numpy.ndar
         looppos = snd.sound.loop
         length = snd.sound.nframes
         speed = SPEED[snd.note - snd.sound.midinote]
-        velofactor = VELOCITY[127 + self.velocity - snd.sound.velocity]
+        velofactor = VELOCITY[127 + snd.velocity - snd.sound.velocity]
         newsz = frame_count * speed
         z = snd.sound.data
         zz = <short *> (z.data)
